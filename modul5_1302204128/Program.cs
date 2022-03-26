@@ -7,6 +7,7 @@ class program
     public static void Main(string[] argss)
     {
         SayaTubeUser user = new SayaTubeUser("Razzaq Adi Wibowo");
+
         SayaTubeVideo video1 = new SayaTubeVideo("Turning Red");
         SayaTubeVideo video2 = new SayaTubeVideo("Red Notice");
         SayaTubeVideo video3 = new SayaTubeVideo("Kimi No Na wa");
@@ -17,17 +18,50 @@ class program
         SayaTubeVideo video8 = new SayaTubeVideo("Seishun Buta Yarou");
         SayaTubeVideo video9 = new SayaTubeVideo("Free Guy");
         SayaTubeVideo video10 = new SayaTubeVideo("365 Days");
+
         user.AddVideo(video1);
+        video1.IncreasePlayCount(24009500);
         user.AddVideo(video2);
+        video2.IncreasePlayCount(22804000);
         user.AddVideo(video3);
+        video3.IncreasePlayCount(25000000);
         user.AddVideo(video4);
+        video4.IncreasePlayCount(25000000);
         user.AddVideo(video5);
+        video5.IncreasePlayCount(25000000);
         user.AddVideo(video6);
+        video6.IncreasePlayCount(25000000);
         user.AddVideo(video7);
+        video7.IncreasePlayCount(25000000);
         user.AddVideo(video8);
+        video8.IncreasePlayCount(5000000);
         user.AddVideo(video9);
+        video9.IncreasePlayCount(22000000);
         user.AddVideo(video10);
+        video10.IncreasePlayCount(20000000);
+
+        //check overflow
+        //for (int i = 0; i < 2000; i++)
+        {
+            video1.IncreasePlayCount(24009500);
+        }
+
         user.PrintAllDataVideoPlaycount();
+
+        Console.WriteLine();
+        Console.WriteLine("------------------------- Detail Video -------------------------");
+
+        video1.PrintVideoDetails();
+        
+        video2.PrintVideoDetails();
+        video3.PrintVideoDetails();
+        video4.PrintVideoDetails();
+        video5.PrintVideoDetails();
+        video6.PrintVideoDetails();
+        video7.PrintVideoDetails();
+        video8.PrintVideoDetails();
+        video9.PrintVideoDetails();
+        video10.PrintVideoDetails();
     }
 }
 class SayaTubeUser
@@ -48,10 +82,21 @@ class SayaTubeUser
     public int GetTotalVideoPlayCount()
     {
         int total = 0;
-        for (int i = 0; i < uploadedVideo.Count; i++)
+        int cek;
+        try
         {
-            total += uploadedVideo[i].PlayCount;
+            for (int i = 0; i < uploadedVideo.Count; i++)
+                {
+                    total += uploadedVideo[i].PlayCount;
+                }
+            cek = checked(total);
         }
+        catch (Exception e)
+        {
+            Console.WriteLine("Integer Overflow");
+            total = 0;            
+        }
+        
         return total;
     }
 
@@ -106,12 +151,14 @@ class SayaTubeVideo
         int cek;
         try
         {
-            cek = checked(playcount);
+            cek = checked(playcount + playCount);
             playCount += playcount;
         }
         catch (Exception ex)
         {
+            Console.WriteLine(title + " Integer Overflow");
             playCount = 0;
+            Environment.Exit(0);
         }
     }
 
